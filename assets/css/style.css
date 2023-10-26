@@ -1,5 +1,5 @@
 :root {
-    --blue: #191970;
+    --green: #097969;
 }
 
 * {
@@ -26,7 +26,7 @@ header h3 {
 }
 
 #high-scores {
-    color: var(--blue);
+    color: var(--green);
 }
 
 main {
@@ -49,7 +49,7 @@ h2 {
 }
 
 button {
-    background-color: var(--blue);
+    background-color: #0047AB;
     color: white;
     height: 45px;
     font-size: 18px;
@@ -59,4 +59,5 @@ button {
 
 button:hover {
     cursor: pointer;
+    background-color: var(--green);
 }
