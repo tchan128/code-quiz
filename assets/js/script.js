@@ -4,6 +4,9 @@ var timeEl = document.querySelector("#countdown");
 var titleEl = document.querySelector("#title");
 var viewScoreEl = document.querySelector("#high-scores");
 var choicesEl = document.querySelector(".choices");
+var lineBreakEl = document.getElementById("line-break");
+var correctAnswer = document.getElementById("correct");
+var wrongAnswer = document.getElementById("wrong");
 
 var timeLeft = 75;
 
@@ -106,7 +109,7 @@ startBtn.addEventListener("click", function() {
     titleEl.textContent = questionBank.question;
 
     for (var i = 0; i < questionBank.choices.length; i++) {
-        
+
         var choice = questionBank.choices[i];
         console.log(choice);
         var c = document.createElement("button");
@@ -122,6 +125,27 @@ startBtn.addEventListener("click", function() {
         choicesEl.appendChild(c);
     }
 
-    const element = event.currentTarget;
+    var userResponse;
+
+    choicesEl.addEventListener("click", function(event) {
+        answer = event.target;
+        
+        if (answer.classList.contains("option")) {
+            var check = answer.getAttribute("correct");
+            if (check === "true") {
+                userResponse = true;
+            } else {
+                userResponse = false;
+            }
+        }
+
+        if (userResponse) {
+            lineBreakEl.style.visibility = "visible";
+            correctAnswer.style.visibility = "visible";
+        } else {
+            lineBreakEl.style.visibility = "visible";
+            wrongAnswer.style.visibility = "visible";
+        }
+    });
 
  });
