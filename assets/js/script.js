@@ -1,6 +1,9 @@
 var startBtn = document.getElementById('start');
 var instructions = document.querySelector(".instructions");
 var timeEl = document.querySelector("#countdown");
+var titleEl = document.querySelector("#title");
+var viewScoreEl = document.querySelector("#high-scores");
+var choicesEl = document.querySelector(".choices");
 
 var timeLeft = 75;
 
@@ -61,7 +64,9 @@ var questions = [
 
 // Helper function
 
-function countdown(){
+// Countdown function
+
+function countdown() {
     
     var timeInterval = setInterval(function(){
         if (timeLeft > 1) {
@@ -74,6 +79,14 @@ function countdown(){
     }, 1000);
 };
 
+// Generates random questions & choices
+
+function questionSelector() {
+    var question = Math.floor(Math.random() * questions.length);
+    return question;
+}
+
+
 // Starting quiz after Start Quiz button is pressed
 
 startBtn.addEventListener("click", function() {
@@ -83,9 +96,32 @@ startBtn.addEventListener("click", function() {
     // Hide instruction & button
     instructions.style.display = "none";
     startBtn.style.display = "none";
+    
+    // While loop for if time is not 0 or question is not all completed yet
 
+    //Generates random question & choices 
 
+    var questionNumber = questionSelector(); // Gives me random int
+    var questionBank = questions[questionNumber]; 
+    titleEl.textContent = questionBank.question;
 
+    for (var i = 0; i < questionBank.choices.length; i++) {
+        
+        var choice = questionBank.choices[i];
+        console.log(choice);
+        var c = document.createElement("button");
+        c.textContent = choice;
+        c.classList.add("option");
 
+        if (i === questionBank.answerIndex) {
+            c.setAttribute("correct", "true");
+        } else {
+            c.setAttribute("correct", "false");
+        }
+
+        choicesEl.appendChild(c);
+    }
+
+    const element = event.currentTarget;
 
  });

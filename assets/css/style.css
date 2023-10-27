@@ -61,3 +61,16 @@ button:hover {
     cursor: pointer;
     background-color: var(--green);
 }
+
+.option {
+    margin: 10px;
+    margin-top: 20px;
+    width: 200px;
+}
+
+.choices {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
