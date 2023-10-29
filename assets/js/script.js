@@ -7,6 +7,7 @@ var choicesEl = document.querySelector(".choices");
 var lineBreakEl = document.getElementById("line-break");
 var headerBar = document.querySelector(".nav");
 var feedbackDiv = document.querySelector(".feedback");
+var submitFormEl = document.querySelector(".form")
 
 var timeLeft = 10;
 var score = 0;
@@ -66,10 +67,6 @@ var questions = [
     },
 ]
 
-// Constants 
-
-var finished = false;
-
 // Helper function
 
 // Countdown function
@@ -83,7 +80,6 @@ function countdown() {
         } else {
             timeEl.textContent = 0;
             clearInterval(timeInterval);
-            finished = true;
         }
     }, 1000);
 };
@@ -136,45 +132,41 @@ startBtn.addEventListener("click", function() {
     instructions.style.display = "none";
     startBtn.style.display = "none";
 
-    questionDisplay(); // Display random question & answers
-
-    var userResponse;
-
-    choicesEl.addEventListener("click", function(event) {
-        answer = event.target;
-        
-        if (answer.classList.contains("option")) {
-            var check = answer.getAttribute("correct");
-            if (check === "true") {
-                userResponse = true;
-            } else {
-                userResponse = false;
-            }
-        }
-
-        console.log(userResponse);
-
-        if (userResponse) {
-            outputSet(userResponse);
-        } else {
-            outputSet(userResponse);
-            timeLeft = timeLeft - 5;
-        }
-        choicesEl.textContent = "";
+    if (timeEl === 0) {
+        var done = "All Done!";
+        done.style.weight = "bolder";
+        titleEl.textContent = done;
+        choicesEl.style.visibility = "hidden";
+        feedbackDiv.style.visibility = "hidden";
+        submitFormEl.style.visibility = "visible";
+    } else {
         questionDisplay(); // Display random question & answers
-
-        if (finished) {
-            var done = "All Done!";
-            done.style.weight = "bolder";
-            titleEl.textContent = done;
-            var submitForm = document.createElement("form");
-        };
-    });
-
+        var userResponse;
+        choicesEl.addEventListener("click", function(event) {
+            answer = event.target;
+            event.preventDefault();
+            
+            if (answer.classList.contains("option")) {
+                var check = answer.getAttribute("correct");
+                
+                if (check === "true") {
+                    userResponse = true;
+                    outputSet(userResponse);
+                } else {
+                    userResponse = false;
+                    outputSet(userResponse);
+                    timeLeft = timeLeft - 5;
+                }
+            }
+            choicesEl.textContent = "";
+            questionDisplay(); // Display random question & answers
+        });
+    }
+        
 });
 
  viewScoreEl.addEventListener("click", function() {
     headerBar.style.visibility = "hidden";
     titleEl.textContent = "High Scores";
 
- }); 
+ });

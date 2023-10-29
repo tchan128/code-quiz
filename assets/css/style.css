@@ -88,6 +88,16 @@ button:hover {
     visibility: hidden;
 }
 
-.answer h2 {
+.enter-initials {
+    font-size: 32px;
+    text-align: center;
+}
+
+#initials {
+    width: 500px;
+    height: 30px;
+}
+
+form {
     visibility: hidden;
 }
