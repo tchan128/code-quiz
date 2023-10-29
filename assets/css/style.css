@@ -12,6 +12,11 @@
 
 header {
     display: flex;
+    visibility: visible;
+}
+
+#high-scores:hover{
+    cursor: pointer;
 }
 
 header h3 {

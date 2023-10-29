@@ -5,10 +5,11 @@ var titleEl = document.querySelector("#title");
 var viewScoreEl = document.querySelector("#high-scores");
 var choicesEl = document.querySelector(".choices");
 var lineBreakEl = document.getElementById("line-break");
-var correctAnswer = document.getElementById("correct");
-var wrongAnswer = document.getElementById("wrong");
+var headerBar = document.querySelector(".nav");
+var feedbackDiv = document.querySelector(".feedback");
 
-var timeLeft = 75;
+var timeLeft = 10;
+var score = 0;
 
 // 10 Questions to choose from
 
@@ -65,6 +66,10 @@ var questions = [
     },
 ]
 
+// Constants 
+
+var finished = false;
+
 // Helper function
 
 // Countdown function
@@ -72,23 +77,54 @@ var questions = [
 function countdown() {
     
     var timeInterval = setInterval(function(){
-        if (timeLeft > 1) {
+        if (timeLeft > 0) {
             timeEl.textContent = timeLeft;
             timeLeft--;
         } else {
-            timeEl.textContent = " "
+            timeEl.textContent = 0;
             clearInterval(timeInterval);
+            finished = true;
         }
     }, 1000);
 };
 
-// Generates random questions & choices
+function outputSet (ansResult) {
+    if (ansResult) {
+        var correct = document.createElement("h3");
+        correct.textContent = "Correct!";
+        feedbackDiv.appendChild(correct);
+    } else {
+        var wrong = document.createElement("h3");
+        wrong.textContent = "Wrong!";
+        feedbackDiv.appendChild(wrong);
+    }
+};
 
-function questionSelector() {
-    var question = Math.floor(Math.random() * questions.length);
-    return question;
-}
+// Generates and display random questions & choices
 
+function questionDisplay() {
+    var qNum = Math.floor(Math.random() * questions.length);
+    var qBank = questions[qNum]; 
+    titleEl.textContent = qBank.question;
+
+    for (var i = 0; i < 4; i++) {
+
+        var choice = qBank.choices[i];
+        var numChoice = (i+1).toString();
+        numChoice = numChoice.concat(". ", choice);
+        var c = document.createElement("button");
+        c.textContent = numChoice;
+        c.classList.add("option");
+
+        if (i === qBank.answerIndex) {
+            c.setAttribute("correct", "true");
+        } else {
+            c.setAttribute("correct", "false");
+        }
+
+        choicesEl.appendChild(c);
+    }
+};
 
 // Starting quiz after Start Quiz button is pressed
 
@@ -99,31 +135,8 @@ startBtn.addEventListener("click", function() {
     // Hide instruction & button
     instructions.style.display = "none";
     startBtn.style.display = "none";
-    
-    // While loop for if time is not 0 or question is not all completed yet
 
-    //Generates random question & choices 
-
-    var questionNumber = questionSelector(); // Gives me random int
-    var questionBank = questions[questionNumber]; 
-    titleEl.textContent = questionBank.question;
-
-    for (var i = 0; i < questionBank.choices.length; i++) {
-
-        var choice = questionBank.choices[i];
-        console.log(choice);
-        var c = document.createElement("button");
-        c.textContent = choice;
-        c.classList.add("option");
-
-        if (i === questionBank.answerIndex) {
-            c.setAttribute("correct", "true");
-        } else {
-            c.setAttribute("correct", "false");
-        }
-
-        choicesEl.appendChild(c);
-    }
+    questionDisplay(); // Display random question & answers
 
     var userResponse;
 
@@ -139,13 +152,29 @@ startBtn.addEventListener("click", function() {
             }
         }
 
+        console.log(userResponse);
+
         if (userResponse) {
-            lineBreakEl.style.visibility = "visible";
-            correctAnswer.style.visibility = "visible";
+            outputSet(userResponse);
         } else {
-            lineBreakEl.style.visibility = "visible";
-            wrongAnswer.style.visibility = "visible";
+            outputSet(userResponse);
+            timeLeft = timeLeft - 5;
         }
+        choicesEl.textContent = "";
+        questionDisplay(); // Display random question & answers
+
+        if (finished) {
+            var done = "All Done!";
+            done.style.weight = "bolder";
+            titleEl.textContent = done;
+            var submitForm = document.createElement("form");
+        };
     });
 
- });
+});
+
+ viewScoreEl.addEventListener("click", function() {
+    headerBar.style.visibility = "hidden";
+    titleEl.textContent = "High Scores";
+
+ }); 
