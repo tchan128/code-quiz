@@ -15,6 +15,7 @@ var ScoreButtonsEl = document.querySelector(".score-actions");
 var clearEl = document.querySelector("#clear");
 var returnEl = document.querySelector("#return");
 var scoreList = document.querySelector(".score-list");
+var finalScoreEl = document.querySelector(".final-score");
 
 // Sections 
 
@@ -172,11 +173,9 @@ function endQuiz() {
     finishGame.style.display = "inline";
 
     viewScores.style.display = "none";
-    var scoreEl = document.createElement("h1");
     s = "Your Final Score is ";
     s = s.concat(score, ".");
-    scoreEl.textContent = s;
-    scoreOutputEl.appendChild(scoreEl);
+    finalScoreEl.textContent = s;
 }   
 
 // Game Reset 
@@ -189,6 +188,7 @@ function resetGame() {
     finishGame.style.display = "none";
     viewScores.style.display = "none";
     headerBar.style.display = "flex";
+    finalScoreEl.textContent = "";
 }
 
 resetGame();
@@ -250,6 +250,7 @@ choicesEl.addEventListener("click", function(event) {
     headerBar.style.display = "none";
 
     scoreList.textContent = "";
+    localStorage.clear();
  });
 
  // Return to Game
@@ -277,8 +278,10 @@ initialSubmitBtn.addEventListener("click", function(event) {
 
     var newScore = initialInput.value;
     newScore = newScore.concat(" - ", score);
+    var previousScore = JSON.parse(localStorage.getItem("code-quiz")) || [];
+    previousScore.push(newScore);
 
-    localStorage.setItem("initial-score", newScore);
+    localStorage.setItem("code-quiz", JSON.stringify(previousScore));
     
     var scores = document.createElement("h3");
     scores.textContent = newScore;
@@ -296,14 +299,19 @@ viewScoreEl.addEventListener("click", function() {
     viewScores.style.display = "inline";
     headerBar.style.display = "none";
 
-    var newScore = localStorage.getItem("initial-score");
-    // var scores = document.createElement("h3");
-    // scores.textContent = newScore;
-    // scoreList.appendChild(scores);
-
+    orderHighScore();
  });
  
- function renderHighScore() {
-    var savedScore = localStorage.getItem("initial-score");
+ function orderHighScore() {
+    var savedScores = localStorage.getItem("code-quiz");
+    savedScores = savedScores.replace("[", "");
+    savedScores = savedScores.replace("]", "");
+    var parsedScore = savedScores.split(",");
 
+    for (var i = 0; i < parsedScore.length; i++) {
+        var score = document.createElement("h3");
+        score.textContent = parsedScore[i].substring(parsedScore[i].indexOf('"') + 1, parsedScore[i].lastIndexOf('"'));
+        console.log(parsedScore[i]);
+        scoreList.appendChild(score);
+    }
  }
