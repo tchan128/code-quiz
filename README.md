@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-    <a href="https://github.com/tchan128/code-quiz"><img src="../code-quiz/assets/quiz-icon.png" alt="Logo" width="80" height="80"></a>
+    <a href="https://github.com/tchan128/code-quiz"><img src="./assets/quiz-icon.png" alt="Logo" width="80" height="80"></a>
     <h3 align="center">Code Quiz</h3>
     <p align="center">
         The motivation for this project is to create a code quiz from scratch to let users test our their knowledge of javascript/HTML. In a wider scope with more questions, it will be super helpful for users who want to practice for technical interviews. I built this project because a big part of an interview for a software development position is the technical test that one might face. This acts as a practice for users who wants to prepare for that. It has a time limit and multiple fundamental questions to go through. As mentioned, more complicated questions can be added in the future as knowledge increases. This code quiz is a solution for users who are looking to just have a basic practice for free or to brush up on their coding knowledge. Through this project, I learned how actively user event listeners and understood the connection and affect it has on each other. Another big piece I learned to use is local storage and what we can do with that sort of information. Doing research, I also learned more limitations of local storage. 
