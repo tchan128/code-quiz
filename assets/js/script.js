@@ -297,7 +297,7 @@ viewScoreEl.addEventListener("click", function() {
     headerBar.style.display = "none";
 
     var newScore = localStorage.getItem("initial-score");
-    // var scores = document.createElement("li");
+    // var scores = document.createElement("h3");
     // scores.textContent = newScore;
     // scoreList.appendChild(scores);
 
