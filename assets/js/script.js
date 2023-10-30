@@ -7,7 +7,21 @@ var choicesEl = document.querySelector(".choices");
 var lineBreakEl = document.getElementById("line-break");
 var headerBar = document.querySelector(".nav");
 var feedbackDiv = document.querySelector(".feedback");
-var submitFormEl = document.querySelector(".form")
+var submitFormEl = document.querySelector("form");
+var scoreOutputEl = document.querySelector(".score-output");
+var initialSubmitBtn = document.querySelector(".initial-submit");
+var initialInput = document.querySelector("#initials");
+var ScoreButtonsEl = document.querySelector(".score-actions");
+var clearEl = document.querySelector("#clear");
+var returnEl = document.querySelector("#return");
+var scoreList = document.querySelector(".score-list");
+
+// Sections 
+
+var startGame = document.querySelector(".start");
+var inGame = document.querySelector(".in-game");
+var finishGame = document.querySelector(".finished-game");
+var viewScores = document.querySelector(".view-scores"); 
 
 var timeLeft = 10;
 var score = 0;
@@ -67,9 +81,11 @@ var questions = [
     },
 ]
 
+var roundQuestions = questions;
+
 // Helper function
 
-// Countdown function
+// Countdown function from 75 seconds
 
 function countdown() {
     
@@ -79,28 +95,37 @@ function countdown() {
             timeLeft--;
         } else {
             timeEl.textContent = 0;
+            endQuiz();
             clearInterval(timeInterval);
         }
     }, 1000);
 };
+
+// Let's user know if their answer is right or wrong
 
 function outputSet (ansResult) {
     if (ansResult) {
         var correct = document.createElement("h3");
         correct.textContent = "Correct!";
         feedbackDiv.appendChild(correct);
+        lineBreakEl.style.visibility = "visible";
     } else {
         var wrong = document.createElement("h3");
         wrong.textContent = "Wrong!";
         feedbackDiv.appendChild(wrong);
+        lineBreakEl.style.visibility = "visible";
     }
 };
 
+function outputReset() {
+    feedbackDiv.textContent = "";
+}
+
 // Generates and display random questions & choices
 
-function questionDisplay() {
-    var qNum = Math.floor(Math.random() * questions.length);
-    var qBank = questions[qNum]; 
+function questionDisplay(roundQ) {
+    var qNum = Math.floor(Math.random() * roundQ.length);
+    var qBank = roundQ[qNum]; 
     titleEl.textContent = qBank.question;
 
     for (var i = 0; i < 4; i++) {
@@ -120,7 +145,47 @@ function questionDisplay() {
 
         choicesEl.appendChild(c);
     }
+
+    roundQ.splice(qNum, 1);
 };
+
+// Ends Quiz
+
+function endQuiz() {
+
+    // clearInterval(timeInterval);
+    if (roundQuestions.length === 0) {
+        var done = "All Done!";
+    } else {
+        var done = "Time's Up!";
+    }
+
+    titleEl.textContent = done;
+    startGame.style.display = "none";
+    inGame.style.display = "none";
+    finishGame.style.display = "inline";
+    
+
+    viewScores.style.display = "none";
+    var scoreEl = document.createElement("h1");
+    s = "Your Final Score is ";
+    s = s.concat(score, ".");
+    scoreEl.textContent = s;
+    scoreOutputEl.appendChild(scoreEl);
+}   
+
+// Game Reset 
+
+function resetGame() {
+    startGame.style.display = "inline";
+    inGame.style.display = "none";
+    finishGame.style.display = "none";
+    viewScores.style.display = "none";
+    headerBar.style.display = "flex";
+    roundQuestions = questions;
+}
+
+resetGame();
 
 // Starting quiz after Start Quiz button is pressed
 
@@ -129,44 +194,99 @@ startBtn.addEventListener("click", function() {
     // Start countdown
     countdown();
     // Hide instruction & button
-    instructions.style.display = "none";
-    startBtn.style.display = "none";
+    startGame.style.display = "none";
+    inGame.style.display = "inline";
+    finishGame.style.display = "none";
+    viewScores.style.display = "none";
 
-    if (timeEl === 0) {
-        var done = "All Done!";
-        done.style.weight = "bolder";
-        titleEl.textContent = done;
-        choicesEl.style.visibility = "hidden";
-        feedbackDiv.style.visibility = "hidden";
-        submitFormEl.style.visibility = "visible";
-    } else {
-        questionDisplay(); // Display random question & answers
-        var userResponse;
-        choicesEl.addEventListener("click", function(event) {
-            answer = event.target;
-            event.preventDefault();
+    questionDisplay(roundQuestions); // Display random question & answers
+    var userResponse;
+    choicesEl.addEventListener("click", function(event) {
+        outputReset();
+        answer = event.target;
+        event.preventDefault();
+        
+        if (answer.classList.contains("option")) {
+            var check = answer.getAttribute("correct");
             
-            if (answer.classList.contains("option")) {
-                var check = answer.getAttribute("correct");
-                
-                if (check === "true") {
-                    userResponse = true;
-                    outputSet(userResponse);
-                } else {
-                    userResponse = false;
-                    outputSet(userResponse);
-                    timeLeft = timeLeft - 5;
-                }
+            if (check === "true") {
+                userResponse = true;
+                outputSet(userResponse);
+                score = score + 10;
+            } else {
+                userResponse = false;
+                outputSet(userResponse);
+                timeLeft = timeLeft - 5;
             }
+        }
+
+        if (roundQuestions.length === 0 || timeLeft <=0) {
+            endQuiz();
+        } else {
             choicesEl.textContent = "";
-            questionDisplay(); // Display random question & answers
-        });
-    }
+            questionDisplay(roundQuestions);
+        }
+
+    });
         
 });
 
- viewScoreEl.addEventListener("click", function() {
-    headerBar.style.visibility = "hidden";
+ // Clear Scores
+
+ clearEl.addEventListener("click", function(event) {
+    startGame.style.display = "none";
+    inGame.style.display = "none";
+    finishGame.style.display = "none";
+    viewScores.style.display = "inline";
+    headerBar.style.display = "none";
+ });
+
+ // Return to Game
+
+ returnEl.addEventListener("click", function(event) {
+    titleEl.textContent = "Coding Quiz Challenge";
+    startGame.style.display = "inline";
+    inGame.style.display = "none";
+    viewScores.style.display = "none";
+    finishGame.style.display = "none";
+    headerBar.style.display = "none";
+    resetGame();
+ });
+
+ // Storing initial & high score
+
+initialSubmitBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    startGame.style.display = "none";
+    inGame.style.display = "none";
+    finishGame.style.display = "none";
+    viewScores.style.display = "inline";
+
+    var newScore = initialInput.value;
+    newScore = newScore.concat(" - ", score);
+
+    localStorage.setItem("initial-score", newScore);
+    
+    var scores = document.createElement("h3");
+    scores.textContent = newScore;
+    scoreList.appendChild(scores);
+});
+
+// View Score
+
+viewScoreEl.addEventListener("click", function() {
     titleEl.textContent = "High Scores";
+    startGame.style.display = "none";
+    inGame.style.display = "none";
+    finishGame.style.display = "none";
+    viewScores.style.display = "inline";
+    headerBar.style.display = "none";
+
+    var newScore = localStorage.getItem("initial-score");
+    // var scores = document.createElement("li");
+    // scores.textContent = newScore;
+    // scoreList.appendChild(scores);
 
  });
+ 

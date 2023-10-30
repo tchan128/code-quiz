@@ -13,22 +13,36 @@
     </header>
     <main>
         <h1 id="title">Coding Quiz Challenge</h1>
-        <div class="instructions">
-            <h2>
-                Try to answer the following code-related questions within the time limit. 
-                Keep in mind that incorrect answers will penalize your score/time by ten seconds!
-            </h2>
+        <div class="start">
+            <div class="instructions">
+                <h2>
+                    Try to answer the following code-related questions within the time limit. 
+                    Keep in mind that incorrect answers will penalize your score/time by ten seconds! 
+                    Each correct answer will earn you 10 points.
+                </h2>
+            </div>
+            <button id="start">Start Quiz</button>
         </div>
-        <button id="start">Start Quiz</button>
-        <div class="choices"></div>
-        <div id="line-break"></div>
-        <div class="feedback"></div>
-        <form>
-            <label class="enter-initials" for="initials">Enter initials: </label>
-            <input type="text" name="initials" id="initials">
-            <button type="submit">Submit</button>
-        </form>
-        <div class="scores"></div>
+        <div class="in-game">
+            <div class="choices"></div>
+            <div id="line-break"></div>
+            <div class="feedback"></div>
+        </div>
+        <div class="finished-game">
+            <div class="score-output"></div>
+            <form>
+                <label class="enter-initials" for="initials">Enter initials: </label>
+                <input type="text" name="initials" id="initials">
+                <button class="initial-submit" type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="view-scores">
+            <div class="score-list"></div>
+            <div class="score-actions">
+                <button id="return">Go Back</button>
+                <button id="clear">Clear High Scores</button>
+            </div>
+        </div>
     </main>
     <script src="./assets/js/script.js"></script>
 </body>
