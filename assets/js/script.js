@@ -23,8 +23,11 @@ var inGame = document.querySelector(".in-game");
 var finishGame = document.querySelector(".finished-game");
 var viewScores = document.querySelector(".view-scores"); 
 
-var timeLeft = 10;
+var START_TIME = 75;
+
+var timeLeft = START_TIME;
 var score = 0;
+var finished = false;
 
 // 10 Questions to choose from
 
@@ -81,7 +84,7 @@ var questions = [
     },
 ]
 
-var roundQuestions = questions;
+var roundQuestions = [...questions];
 
 // Helper function
 
@@ -90,7 +93,9 @@ var roundQuestions = questions;
 function countdown() {
     
     var timeInterval = setInterval(function(){
-        if (timeLeft > 0) {
+        if (finished) {
+            timeLeft = timeLeft;
+        } else if (timeLeft > 0) {
             timeEl.textContent = timeLeft;
             timeLeft--;
         } else {
@@ -153,7 +158,8 @@ function questionDisplay(roundQ) {
 
 function endQuiz() {
 
-    // clearInterval(timeInterval);
+    finished = true;
+
     if (roundQuestions.length === 0) {
         var done = "All Done!";
     } else {
@@ -164,7 +170,6 @@ function endQuiz() {
     startGame.style.display = "none";
     inGame.style.display = "none";
     finishGame.style.display = "inline";
-    
 
     viewScores.style.display = "none";
     var scoreEl = document.createElement("h1");
@@ -177,12 +182,13 @@ function endQuiz() {
 // Game Reset 
 
 function resetGame() {
+    roundQuestions = [...questions];
+    choicesEl.textContent = "";
     startGame.style.display = "inline";
     inGame.style.display = "none";
     finishGame.style.display = "none";
     viewScores.style.display = "none";
     headerBar.style.display = "flex";
-    roundQuestions = questions;
 }
 
 resetGame();
@@ -190,45 +196,48 @@ resetGame();
 // Starting quiz after Start Quiz button is pressed
 
 startBtn.addEventListener("click", function() {
-
+    console.log(roundQuestions);
+    console.log(questions);
     // Start countdown
+    timeLeft = START_TIME;
+    finished = false;
     countdown();
     // Hide instruction & button
     startGame.style.display = "none";
     inGame.style.display = "inline";
     finishGame.style.display = "none";
     viewScores.style.display = "none";
+    questionDisplay(roundQuestions);
+});
 
-    questionDisplay(roundQuestions); // Display random question & answers
-    var userResponse;
-    choicesEl.addEventListener("click", function(event) {
-        outputReset();
-        answer = event.target;
-        event.preventDefault();
+var userResponse;
+
+choicesEl.addEventListener("click", function(event) {
+    outputReset();
+    answer = event.target;
+    event.preventDefault();
+    
+    if (answer.classList.contains("option")) {
+        var check = answer.getAttribute("correct");
         
-        if (answer.classList.contains("option")) {
-            var check = answer.getAttribute("correct");
-            
-            if (check === "true") {
-                userResponse = true;
-                outputSet(userResponse);
-                score = score + 10;
-            } else {
-                userResponse = false;
-                outputSet(userResponse);
-                timeLeft = timeLeft - 5;
-            }
-        }
-
-        if (roundQuestions.length === 0 || timeLeft <=0) {
-            endQuiz();
+        if (check === "true") {
+            userResponse = true;
+            outputSet(userResponse);
+            score = score + 10;
         } else {
-            choicesEl.textContent = "";
-            questionDisplay(roundQuestions);
+            userResponse = false;
+            outputSet(userResponse);
+            timeLeft = timeLeft - 5;
         }
+    }
 
-    });
-        
+    if (roundQuestions.length === 0 || timeLeft <=0) {
+        endQuiz();
+    } else {
+        choicesEl.textContent = "";
+        questionDisplay(roundQuestions);
+    }
+
 });
 
  // Clear Scores
@@ -239,6 +248,8 @@ startBtn.addEventListener("click", function() {
     finishGame.style.display = "none";
     viewScores.style.display = "inline";
     headerBar.style.display = "none";
+
+    scoreList.textContent = "";
  });
 
  // Return to Game
@@ -258,6 +269,7 @@ startBtn.addEventListener("click", function() {
 initialSubmitBtn.addEventListener("click", function(event) {
     event.preventDefault();
 
+    titleEl.textContent = "High Scores";
     startGame.style.display = "none";
     inGame.style.display = "none";
     finishGame.style.display = "none";
@@ -276,6 +288,7 @@ initialSubmitBtn.addEventListener("click", function(event) {
 // View Score
 
 viewScoreEl.addEventListener("click", function() {
+    finished = true;
     titleEl.textContent = "High Scores";
     startGame.style.display = "none";
     inGame.style.display = "none";
@@ -290,3 +303,7 @@ viewScoreEl.addEventListener("click", function() {
 
  });
  
+ function renderHighScore() {
+    var savedScore = localStorage.getItem("initial-score");
+
+ }
