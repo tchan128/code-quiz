@@ -299,7 +299,11 @@ viewScoreEl.addEventListener("click", function() {
     viewScores.style.display = "inline";
     headerBar.style.display = "none";
 
-    orderHighScore();
+    if ((scoreList.hasChildNodes())) {
+        null;
+    } else {
+        orderHighScore();
+    }
  });
  
  function orderHighScore() {
