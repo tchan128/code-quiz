@@ -123,6 +123,8 @@ function outputSet (ansResult) {
     }
 };
 
+// Clears answer feedback
+
 function outputReset() {
     feedbackDiv.textContent = "";
 }
@@ -211,6 +213,8 @@ startBtn.addEventListener("click", function() {
 });
 
 var userResponse;
+
+// Event listener for when users select choices 
 
 choicesEl.addEventListener("click", function(event) {
     outputReset();
@@ -305,8 +309,10 @@ viewScoreEl.addEventListener("click", function() {
         orderHighScore();
     }
  });
+
+// Ordering high score into a list
  
- function orderHighScore() {
+function orderHighScore() {
     var savedScores = localStorage.getItem("code-quiz");
     savedScores = savedScores.replace("[", "");
     savedScores = savedScores.replace("]", "");
