@@ -57,7 +57,14 @@ Here are a couple of things I've implemented that elevates the coding quiz:
 
 ## Visuals
 
-1. Local Storage when multiple games are played 
+1. Local Storage when one game is played
+
+![Screenshot 2023-10-30 at 11 02 57 PM](https://github.com/tchan128/code-quiz/assets/56553374/1a64cd1b-51cc-40e0-8447-3e949aeb0bba)
+
+2. Local storage when multiple games are played 
+
+![Screenshot 2023-10-30 at 10 56 37 PM](https://github.com/tchan128/code-quiz/assets/56553374/85988a25-89d0-4366-921a-3b70c95372da)
+
 
 ## Roadmap
 
